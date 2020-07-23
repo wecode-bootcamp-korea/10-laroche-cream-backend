@@ -1,14 +1,35 @@
 from django.db import models
 
+class Gender(models.Model):
+    name = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = "genders"
+
 class User(models.Model):
-    user_name = models.IntegerField(default=0)
-    user_id = models.CharField(max_length=50)
-    user_pw = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, default=" ")
+    account = models.CharField(max_length=100, default=" ")
+    password = models.CharField(max_length=100, default=" ")
+    birthday = models.DateField(default=0)
+    gender_type = models.ForeignKey('Gender', on_delete=models.SET_NULL, null=True)
+    email = models.CharField(max_length=200, default=" ")
+    phoneNumber = models.CharField(max_length=100, default=" ")
+    skinInfo = models.ForeignKey('SkinInfo', on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    
+    class Meta:
+        db_table = "users"
 
-class User_info(models.Model):
-    gender = models.CharField(max_length=1)
-    email = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=30)
 
-class     
+class SkinInfo(models.Model):
+    skinType = models.CharField(max_length=50, null=True)
+    skinTrouble = models.CharField(max_length=100, null=True)
+    skinSensitivity = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = "skin_info"
+
+
+
 
