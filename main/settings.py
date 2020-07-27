@@ -1,4 +1,4 @@
-import my_settings 
+import my_settings
 
 import os
 
@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'user'
+    'user',
+    'product',
+
 ]
 
 MIDDLEWARE = [
