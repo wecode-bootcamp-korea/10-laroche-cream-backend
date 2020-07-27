@@ -13,6 +13,8 @@ from product.models import (
     Component,
     ProductFlag
 )
+django query set
+object.create
 
 CSV_PATH = './product.csv'
 
@@ -34,11 +36,30 @@ with open (CSV_PATH, encoding='UTF-8') as in_file:
         for row in data_reader:
             ProductFlag.object.create(
                 product_id = i,
-                new = row[11]
-                best = row[10]
-                gift = row[6]
+                new = row[11],
+                best = row[10],
+                gift = row[6],
                 sale = row[7]
+                )
+            i += 1
+
+    def description_csv_reader():
+        i = 1
+        for row in data_reader:
+            Description.object.create(
+                product_id = i,
+                description = row[2]
             )
             i += 1
+
+    def image_csv_reader():
+        i = 1
+        for row in data_reader:
+            Image.object.create(
+                product_id = i,
+                image_url = row[9].split("뿌")
+
+
+
 
 

@@ -48,7 +48,7 @@ class ProductFlag(models.Model):
     gift_flag = models.BooleanField(default=False)
     best_flag = models.BooleanField(default=False)
     new_flag = models.BooleanField(default=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
 
 
     class Meta:
