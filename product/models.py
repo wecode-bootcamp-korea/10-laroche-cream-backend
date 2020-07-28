@@ -75,15 +75,15 @@ class Image(models.Model):
     def __str__(self):
         return self.image_url
 
-class Component:
-    component = models.CharField(max_length = 400)
-    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+class Component(models.Model):
+    component = models.CharField(max_length=400)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'components'
 
     def __str__(self):
-        return self.component
+        return self.components
 
 
 
