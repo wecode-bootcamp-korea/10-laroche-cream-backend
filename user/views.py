@@ -20,7 +20,6 @@ from .models        import (
 )    
 from product.models import *
 
-
 class SignUpView(View):
     def post(self, request):
         user_data = json.loads(request.body)
