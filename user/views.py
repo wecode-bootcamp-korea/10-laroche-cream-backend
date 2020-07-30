@@ -15,8 +15,6 @@ from .models        import (
     User, 
     Gender, 
     SkinType, 
-    SkinTrouble, 
-    UserSkinTrouble, 
     LikeProduct, 
     CartProduct
 )    
@@ -27,9 +25,6 @@ class SignUpView(View):
     def post(self, request):
         user_data = json.loads(request.body)
         try:
-            if User.objects.filter(account = user_data['account']).exists():
-                return JsonResponse({'message':'DUPLICATED ID'}, status=400)
-
             User(
                 name            = user_data['name'],
                 account         = user_data['account'],
@@ -39,18 +34,22 @@ class SignUpView(View):
                 gender_type     = Gender.objects.get(name = user_data['gender_type']),
                 phoneNumber     = user_data['phoneNumber'],
                 skinType        = SkinType.objects.get(name = user_data['skinType']),
+                skinTrouble     = user_data['skinTrouble'],
                 skinSensitivity = user_data['skinSensitivity']
             ).save()
 
-            UserSkinTrouble(
-                user        = User.objects.get(account = user_data['account']),
-                skinTrouble = SkinTrouble.objects.get(name = user_data['skinTrouble'])
-            ).save()
-
-            return JsonResponse({'message':'SIGNUP SUCCESS'}, status=200)
+            return JsonResponse({'message':'SIGNUP_SUCCESS'}, status=200)
         
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=400)
+
+class AccountCheckView(View):
+    def post(self,request):
+        user_data = json.loads(request.body)
+        if User.objects.filter(account = user_data['account']).exists():
+            return JsonResponse({'message':'DUPLICATED_ID'}, status=200)
+
+        return JsonResponse({'message':'USEABLE_ACCOUNT'}, status=200)
 
 class SignInView(View):
     def post(self, request):
@@ -70,7 +69,13 @@ class SignInView(View):
 
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=400)
-            
+
+class UserInfoView(View):
+    @Login_required
+    def get(self, request):
+        user = User.objects.get(id=request.user.id)
+
+        return JsonResponse({'name':user.name})
 
 class LikeProductView(View):
     @Login_required
@@ -83,13 +88,13 @@ class LikeProductView(View):
                 product = Product.objects.get(id = user_data['product_id'])
             ).save
 
-            return JsonResponse({'message':'ADD LIKE_PRODUCT'}, status=200)
+            return JsonResponse({'message':'ADD_LIKE_PRODUCT'}, status=200)
 
         else:
             delete_product = LikeProduct.objects.get(product_id = user_data['product_id'], user_id = request.user.id)
             delete_product.delete()
 
-            return JsonResponse({'message':'DELETE LIKE_PRODUCT'}, status=200)
+            return JsonResponse({'message':'DELETE_LIKE_PRODUCT'}, status=200)
 
     @Login_required 
     def get(self, request):
@@ -125,7 +130,7 @@ class CartProductView(View):
                     product = Product.objects.get(id = user_data['product_id'])
                 ).save
 
-                return JsonResponse({'message':'ADD CART_PRODUCT'}, status=200) 
+                return JsonResponse({'message':'ADD_CART_PRODUCT'}, status=200) 
             else:
                 return JsonResponse({'message': 'ALREADY_EXIST_PRODUCT'}, status=400)
 
@@ -154,5 +159,4 @@ class CartProductView(View):
             cart_list.append(data)
 
         return JsonResponse({'cart_list' : cart_list})
-
 

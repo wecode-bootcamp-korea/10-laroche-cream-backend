@@ -16,8 +16,8 @@ class Login_required:
         access_token = request.headers.get("Authorization", None)
         try:
             if access_token:
-                payload = jwt.decode(access_token, "secret", algorithms="HS256")
-                user = User.objects.get(account=payload['account'])
+                payload      = jwt.decode(access_token, "secret", algorithms = "HS256")
+                user         = User.objects.get(account = payload['account'])
                 request.user = user
                 return self.original_function(self, request, *args, **kwargs)
 
