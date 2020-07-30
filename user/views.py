@@ -19,7 +19,6 @@ from user.models      import (
 )
 from core.utils import login_decorator
 
-
 class SignUpView(View):
     def post(self, request):
         user_data = json.loads(request.body)
@@ -70,17 +69,4 @@ class SignInView(View):
 
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=400)
-            
-
-class LikeProductView(View):
-    @login_decorator
-    def get(self, request):
-        return JsonResponse({'like_list':list(Product.objects.values())}, status=200)
-
-    def post(self, request):
-        
-
-
-        
-
-
+                
