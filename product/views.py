@@ -10,21 +10,18 @@ from .models import (
     Menu,
     MainCategory,
     SubCategory,
-    Product, 
-    ProductFlag, 
-    Description, 
-    Image, 
+    Product,
+    ProductFlag,
+    Description,
+    Image,
     Component,
 )
 
 class MainView(View):
     def get(self, request):
         image_url = list(Image.objects.filter(product__productflag__best_flag = True).values('image_url'))
-        #역참조 images_set 
         images = []
-        for i in image_url:
-            images.append(i['image_url'].replace("[","").replace("]","").split(','))
-        
+        [images.append(i['image_url'].replace("[","").replace("]","").split(',')) for i in image_url]
         datas = list(Product.objects.filter(productflag__best_flag = True).values(
             "id",
             "product_line",
@@ -34,8 +31,7 @@ class MainView(View):
             "hash_tag",
         ))
         data = []
-        for i in range(len(datas)):
-            data.append({'product' : datas[i], 'images' : images[i]})
+        [data.append({'product' : datas[i], 'images' : images[i]}) for i in range(len(datas))]
         return JsonResponse({'data': data}, status=200)
 
 class AllItemView(View):
@@ -44,18 +40,15 @@ class AllItemView(View):
         flag_objects =[]
         for i in flag:
             flag_objects.append({
-            'id' : i['id'],
+            'id'   : i['id'],
             'best' : i['best_flag'],
-            'new' : i['new_flag'],
+            'new'  : i['new_flag'],
             'gift' : i['gift_flag'],
             'sale' : i['sale_flag']
             })
-        
-        
         image_url = list(Image.objects.values('image_url'))
         images = []
-        for i in image_url:
-            images.append(i['image_url'].replace("[","").replace("]","").split(','))
+        [images.append(i['image_url'].replace("[","").replace("]","").split(',')) for i in image_url]
         datas = list(Product.objects.values(
             "id",
             "product_line",
@@ -65,14 +58,11 @@ class AllItemView(View):
             "hash_tag",
         ))
         data = []
-        # for i in range(len(datas)):
-        #     data.append({'product' : datas[i], 'images' : images[i]})
-        
         for i in range(len(datas)):
             data.append({
-            'product' : datas[i], 
-            'images'  : images[i], 
-            'best'    : flag_objects[i]['best'], 
+            'product' : datas[i],
+            'images'  : images[i],
+            'best'    : flag_objects[i]['best'],
             'new'     : flag_objects[i]['new'],
             'gift'    : flag_objects[i]['gift'],
             'sale'    : flag_objects[i]['sale']
@@ -80,14 +70,14 @@ class AllItemView(View):
 
         return JsonResponse({'data': data}, status=200)
 
-
 class DetailItemView(View):
     def post(self, request):
         pid = json.loads(request.body)
-        # pid = request.GET.get('product')
-        #flag = ProductFlag.objects.get(product=Product.objects.get(id=pid))
-        #image_url = list(Image.objects.filter(product__productflag__best_flag = True).values('image_url'))
         product = Product.objects.prefetch_related('productflag_set').select_related("description").prefetch_related("component_set").prefetch_related("image_set").get(id = pid['id'])
+        img_set = product.image_set.all()[0].image_url
+        img_url = img_set[:]
+        img_url = img_url.replace("\"", '').replace("\"",'').replace('[','').replace(']','').replace("'","").replace(' ', '').split(',')
+        del img_url[len(img_url)-1]
 
         product_object = {
             'id'          : pid['id'],
@@ -102,10 +92,8 @@ class DetailItemView(View):
             'hash_tag'    : product.hash_tag,
             'description' : product.description.description,
             'component'   : product.component_set.all()[0].component,
-            'image'       : product.image_set.all()[0].image_url
-            }
+            'image'       : img_url
+        }
+
         return JsonResponse({'data': product_object}, status=200)
-        #Product.objects.prefetch_related(description,,,,,)
-        # flag = list(ProductFlag.objects.filter(id= product__id).values())
-    
 
