@@ -58,3 +58,4 @@ class CartProduct(models.Model):
     class Meta:
         db_table = "cartproducts"
 
+

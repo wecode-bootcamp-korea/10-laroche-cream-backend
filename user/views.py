@@ -22,7 +22,6 @@ from .models        import (
 )    
 from product.models import *
 
-
 class SignUpView(View):
     def post(self, request):
         user_data = json.loads(request.body)
@@ -71,7 +70,6 @@ class SignInView(View):
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=400)
             
-
 class LikeProductView(View):
     @Login_required
     def post(self, request):
@@ -154,5 +152,3 @@ class CartProductView(View):
             cart_list.append(data)
 
         return JsonResponse({'cart_list' : cart_list})
-
-
