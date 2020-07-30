@@ -156,3 +156,5 @@ class CartProductView(View):
         return JsonResponse({'cart_list' : cart_list})
 
 
+
+        

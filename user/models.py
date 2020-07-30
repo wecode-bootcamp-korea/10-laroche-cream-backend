@@ -34,7 +34,7 @@ class SkinType(models.Model):
 class UserSkinTrouble(models.Model):
     user        = models.ForeignKey('User', on_delete = models.CASCADE)
     skinTrouble = models.ForeignKey('SkinTrouble', on_delete = models.CASCADE)
-    
+   
     class Meta:
         db_table = "user_skin_troubles"
 
@@ -43,7 +43,7 @@ class SkinTrouble(models.Model):
 
     class Meta:
         db_table = "skin_troubles"
-
+        
 class LikeProduct(models.Model):
     user    = models.ForeignKey(User, on_delete = models.CASCADE)
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
@@ -57,4 +57,6 @@ class CartProduct(models.Model):
 
     class Meta:
         db_table = "cartproducts"
+
+
 
