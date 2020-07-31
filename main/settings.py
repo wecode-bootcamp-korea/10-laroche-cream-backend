@@ -1,4 +1,4 @@
-import my_settings 
+import my_settings
 
 import os
 
