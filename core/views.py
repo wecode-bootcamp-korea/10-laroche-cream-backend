@@ -23,3 +23,6 @@ class ProductDetailTagView(View):
         return JsonResponse({'data': data})
 
 
+=======
+from django.shortcuts import render
+

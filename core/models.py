@@ -11,6 +11,3 @@ class ProductDetailTag(models.Model):
     class Meta:
         db_table = "product_detail_tags"
 
-
-
-

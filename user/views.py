@@ -19,6 +19,7 @@ from .models        import (
     CartProduct
 )    
 from product.models import *
+from core.utils import login_decorator
 
 class SignUpView(View):
     def post(self, request):
