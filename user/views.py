@@ -17,7 +17,7 @@ from user.models      import (
     UserSkinTrouble,
     SkinTrouble
 )
-
+from core.utils import login_decorator
 
 class SignUpView(View):
     def post(self, request):
@@ -26,7 +26,6 @@ class SignUpView(View):
             if User.objects.filter(account = user_data['account']).exists():
                 return JsonResponse({'message':'DUPLICATED ID'}, status=400)
 
-             len(user_data['account']) 
 
             User(
                 name        = user_data['name'],
@@ -62,7 +61,7 @@ class SignInView(View):
  
                 if bcrypt.checkpw(user_data['password'].encode('utf-8'), user.password.encode('utf-8')):
                     token = jwt.encode({'user_id':user.id}, 'secret', algorithm='HS256').decode('utf-8')
-                    return JsonResponse({'access_token':token}, status=200)
+                    return JsonResponse({'access_token':access_token}, status=200)
                 
                 return JsonResponse({'message':'UNAUTHORIZED'}, status=401)
 
@@ -70,4 +69,4 @@ class SignInView(View):
 
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=400)
-            
+                
