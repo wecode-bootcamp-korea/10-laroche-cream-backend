@@ -238,3 +238,6 @@ Temporary Items
 .DS_Store
 
 my_settings.py
+*.csv
+db_uploader.py
+db_uploader2.py
