@@ -18,8 +18,11 @@ from .models        import (
     LikeProduct, 
     CartProduct
 )    
-from product.models import *
-from core.utils import login_decorator
+from product.models import (
+    Product,
+    ProductFlag,
+    Image
+)
 
 class SignUpView(View):
     def post(self, request):
@@ -73,9 +76,8 @@ class SignInView(View):
 class UserInfoView(View):
     @Login_required
     def get(self, request):
-        user = User.objects.get(id=request.user.id)
 
-        return JsonResponse({'name':user.name})
+        return JsonResponse({'name':request.user.name})
 
 class LikeProductView(View):
     @Login_required
@@ -90,11 +92,10 @@ class LikeProductView(View):
 
             return JsonResponse({'message':'ADD_LIKE_PRODUCT'}, status=200)
 
-        else:
-            delete_product = LikeProduct.objects.get(product_id = user_data['product_id'], user_id = request.user.id)
-            delete_product.delete()
+        delete_product = LikeProduct.objects.get(product_id = user_data['product_id'], user_id = request.user.id)
+        delete_product.delete()
 
-            return JsonResponse({'message':'DELETE_LIKE_PRODUCT'}, status=200)
+        return JsonResponse({'message':'DELETE_LIKE_PRODUCT'}, status=200)
 
     @Login_required 
     def get(self, request):
@@ -131,8 +132,8 @@ class CartProductView(View):
                 ).save
 
                 return JsonResponse({'message':'ADD_CART_PRODUCT'}, status=200) 
-            else:
-                return JsonResponse({'message': 'ALREADY_EXIST_PRODUCT'}, status=400)
+
+            return JsonResponse({'message': 'ALREADY_EXIST_PRODUCT'}, status=400)
 
         except KeyError:
             return JsonResponse({'message':'KEYERROR'}, status=200)
