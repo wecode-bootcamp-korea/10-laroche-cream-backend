@@ -8,4 +8,5 @@ urlpatterns = [
     path('/userinfo', UserInfoView.as_view()),
     path('/likeproduct', LikeProductView.as_view()),
     path('/cartproduct', CartProductView.as_view())
+]
 
